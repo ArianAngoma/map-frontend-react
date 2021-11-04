@@ -2,6 +2,7 @@
 
 .idea
 package-lock.json
+.env.development
 
 # dependencies
 /node_modules
