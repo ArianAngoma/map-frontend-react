@@ -20,6 +20,19 @@ export const useMapbox = (startPoint) => {
     /* Estado para las coordenadas */
     const [coords, setCoords] = useState(startPoint);
 
+    /* Función para agregar marcadores */
+    const addMarker = useCallback((e) => {
+        const {lng, lat} = e.lngLat;
+        const marker = new mapboxgl.Marker();
+        marker.id = v4();
+
+        marker.setLngLat([lng, lat])
+            .addTo(map.current)
+            .setDraggable(true);
+
+        markers.current[marker.id] = marker;
+    }, []);
+
     /* Mostrar el mapa al cargar el componente */
     useEffect(() => {
         map.current = new mapboxgl.Map({
@@ -46,21 +59,12 @@ export const useMapbox = (startPoint) => {
 
     /* Agregar marcadores caundo hacemos click */
     useEffect(() => {
-        map.current?.on('click', (e) => {
-            const {lng, lat} = e.lngLat;
-            const marker = new mapboxgl.Marker();
-            marker.id = v4();
-
-            marker.setLngLat([lng, lat])
-                .addTo(map.current)
-                .setDraggable(true);
-
-            markers.current[marker.id] = marker;
-        });
-    }, []);
+        map.current?.on('click', addMarker);
+    }, [addMarker]);
 
     return {
         coords,
-        setRef
+        setRef,
+        addMarker
     }
 }
