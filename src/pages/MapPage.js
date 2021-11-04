@@ -13,35 +13,34 @@ const startPoint = {
 export const MapPage = () => {
     const mapDiv = useRef();
 
-    /* Estado del mapa */
-    const [map, setMap] = useState(null);
+    const map = useRef();
+
     /* Estado para las coordenadas */
     const [coords, setCoords] = useState(startPoint);
 
     /* Mostrar el mapa al cargar el componente */
     useEffect(() => {
-        const map = new mapboxgl.Map({
+        map.current = new mapboxgl.Map({
             container: mapDiv.current,
             style: 'mapbox://styles/mapbox/streets-v11',
             center: [startPoint.lng, startPoint.lat],
             zoom: startPoint.zoom
         });
-        setMap(map);
     }, []);
 
     /* Escuchar cuando se mueve el mapa */
     useEffect(() => {
-        map?.on('move', () => {
-            const {lng, lat} = map.getCenter();
+        map.current?.on('move', () => {
+            const {lng, lat} = map.current.getCenter();
             setCoords({
                 lng: lng.toFixed(4),
                 lat: lat.toFixed(4),
-                zoom: map.getZoom().toFixed(2)
+                zoom: map.current.getZoom().toFixed(2)
             })
         });
 
-        return map?.off('move');
-    }, [map]);
+        return map.current?.off('move');
+    }, []);
 
     return (
         <>
