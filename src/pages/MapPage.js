@@ -11,13 +11,21 @@ const startPoint = {
 
 export const MapPage = () => {
     /* Custom Hook para Mapbox */
-    const {setRef, coords, newMarker$} = useMapbox(startPoint);
+    const {setRef, coords, newMarker$, moveMarker$} = useMapbox(startPoint);
 
+    /* Escuchar si se crea un nuevo marcador */
     useEffect(() => {
         newMarker$.subscribe(marker => {
             console.log(marker);
         });
-    }, [newMarker$])
+    }, [newMarker$]);
+
+    /* Escuchar si se mueve un marcador */
+    useEffect(() => {
+        moveMarker$.subscribe(marker => {
+            console.log(marker);
+        });
+    }, [moveMarker$]);
 
     return (
         <>
