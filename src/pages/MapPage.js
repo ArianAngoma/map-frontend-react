@@ -1,5 +1,6 @@
 /* Importaciones propias */
 import {useMapbox} from '../hooks/useMapbox';
+import {useEffect} from 'react';
 
 /* Punto inicial del mapa */
 const startPoint = {
@@ -10,7 +11,13 @@ const startPoint = {
 
 export const MapPage = () => {
     /* Custom Hook para Mapbox */
-    const {setRef, coords} = useMapbox(startPoint);
+    const {setRef, coords, newMarker$} = useMapbox(startPoint);
+
+    useEffect(() => {
+        newMarker$.subscribe(marker => {
+            console.log(marker);
+        });
+    }, [newMarker$])
 
     return (
         <>
