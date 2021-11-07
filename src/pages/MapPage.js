@@ -1,6 +1,8 @@
-/* Importaciones propias */
+import {useContext, useEffect} from 'react';
 import {useMapbox} from '../hooks/useMapbox';
-import {useEffect} from 'react';
+
+/* Importaciones propias */
+import {SocketContext} from '../context/SocketContext';
 
 /* Punto inicial del mapa */
 const startPoint = {
@@ -10,22 +12,33 @@ const startPoint = {
 }
 
 export const MapPage = () => {
+    /* Socket */
+    const {socket} = useContext(SocketContext);
+
     /* Custom Hook para Mapbox */
     const {setRef, coords, newMarker$, moveMarker$} = useMapbox(startPoint);
 
     /* Escuchar si se crea un nuevo marcador */
     useEffect(() => {
         newMarker$.subscribe(marker => {
-            console.log(marker);
+            // console.log(marker);
+            socket.emit('new-marker', marker);
         });
-    }, [newMarker$]);
+    }, [newMarker$, socket]);
 
     /* Escuchar si se mueve un marcador */
     useEffect(() => {
         moveMarker$.subscribe(marker => {
-            console.log(marker);
+            // console.log(marker);
         });
     }, [moveMarker$]);
+
+    /* Escuchar evento de nuevos marcadores */
+    useEffect(() => {
+        socket.on('new-marker', (marker) => {
+            console.log(marker);
+        });
+    }, [socket]);
 
     return (
         <>
