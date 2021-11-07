@@ -26,10 +26,10 @@ export const useMapbox = (startPoint) => {
     const [coords, setCoords] = useState(startPoint);
 
     /* Función para agregar marcadores */
-    const addMarker = useCallback((e) => {
-        const {lng, lat} = e.lngLat;
+    const addMarker = useCallback((e, id) => {
+        const {lng, lat} = e.lngLat || e;
         const marker = new mapboxgl.Marker();
-        marker.id = v4();
+        marker.id = id ?? v4();
 
         marker.setLngLat([lng, lat])
             .addTo(map.current)
@@ -39,7 +39,7 @@ export const useMapbox = (startPoint) => {
         markers.current[marker.id] = marker;
 
         /* Emitir el marcador creado */
-        newMarker.current.next({
+        if (!id) newMarker.current.next({
             id: marker.id,
             lng,
             lat

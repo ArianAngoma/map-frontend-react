@@ -16,7 +16,18 @@ export const MapPage = () => {
     const {socket} = useContext(SocketContext);
 
     /* Custom Hook para Mapbox */
-    const {setRef, coords, newMarker$, moveMarker$} = useMapbox(startPoint);
+    const {setRef, coords, newMarker$, moveMarker$, addMarker} = useMapbox(startPoint);
+
+    /* Escuchar marcadores existentes */
+    useEffect(() => {
+        socket.on('markers-actives', (markers) => {
+            // console.log(markers);
+            for (const key of Object.keys(markers)) {
+                // console.log(markers[key]);
+                addMarker(markers[key], key);
+            }
+        });
+    }, [socket, addMarker]);
 
     /* Escuchar si se crea un nuevo marcador */
     useEffect(() => {
