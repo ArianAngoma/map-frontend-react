@@ -56,6 +56,11 @@ export const useMapbox = (startPoint) => {
         });
     }, []);
 
+    /* Función para actualizar la ubicación del marcador */
+    const updateLocation = useCallback(({id, lng, lat}) => {
+        markers.current[id].setLngLat([lng, lat]);
+    }, []);
+
     /* Mostrar el mapa al cargar el componente */
     useEffect(() => {
         map.current = new mapboxgl.Map({
@@ -89,6 +94,7 @@ export const useMapbox = (startPoint) => {
         coords,
         setRef,
         addMarker,
+        updateLocation,
         newMarker$: newMarker.current,
         moveMarker$: moveMarker.current
     }
