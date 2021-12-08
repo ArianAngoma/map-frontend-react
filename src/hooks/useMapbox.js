@@ -3,6 +3,7 @@ import mapboxgl from 'mapbox-gl';
 import {v4} from 'uuid';
 import {Subject} from 'rxjs';
 
+/* Key de MapBox */
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX;
 
 export const useMapbox = (startPoint) => {
